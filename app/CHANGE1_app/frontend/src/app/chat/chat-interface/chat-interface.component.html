@@ -1,0 +1,55 @@
+<mat-toolbar class="nbp-toolbar chat-toolbar">
+  <span class="nbp-logo-area">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" stroke="#c4a84a" stroke-width="1.5" fill="#1c2d5e"/>
+      <circle cx="18" cy="18" r="14" stroke="#c4a84a" stroke-width="0.8" fill="none"/>
+      <text x="18" y="22" text-anchor="middle" font-family="Roboto,sans-serif" font-size="9" font-weight="700" fill="#c4a84a" letter-spacing="0.5">NBP</text>
+    </svg>
+    <span class="nbp-title-block">
+      <span class="nbp-title-main">Narodowy Bank Polski</span>
+      <span class="nbp-title-sub">Asystent Serwisu Sprzętu</span>
+    </span>
+  </span>
+  <span class="spacer"></span>
+  <button mat-button class="nbp-new-btn" (click)="newSession()">
+    <mat-icon>add_circle_outline</mat-icon>
+    Nowe zgłoszenie
+  </button>
+</mat-toolbar>
+
+<div class="message-list" #messageList>
+  @for (msg of messages; track $index) {
+    <app-message-bubble [message]="msg" />
+  }
+
+  @if (isLoading && messages.length > 0 && messages[messages.length - 1].content === '') {
+    <div class="typing-indicator">
+      <mat-spinner diameter="20" />
+      <span>Asystent pisze…</span>
+    </div>
+  }
+</div>
+
+<div class="input-area">
+  <mat-form-field appearance="outline" class="input-field">
+    <mat-label>Wpisz wiadomość</mat-label>
+    <textarea
+      matInput
+      [(ngModel)]="inputText"
+      [disabled]="isLoading"
+      rows="2"
+      (keydown.control.enter)="sendMessage()"
+      placeholder="Ctrl+Enter aby wysłać"
+    ></textarea>
+  </mat-form-field>
+
+  <button
+    mat-fab
+    class="nbp-send-btn send-btn"
+    [disabled]="isLoading || !inputText.trim()"
+    (click)="sendMessage()"
+    aria-label="Wyślij"
+  >
+    <mat-icon>send</mat-icon>
+  </button>
+</div>

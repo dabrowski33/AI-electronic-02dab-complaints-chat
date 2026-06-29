@@ -1,0 +1,19 @@
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f4f4f4;
+  color: #1a1a2e;
+}
+
+/* Override Angular Material toolbar color */
+.mat-toolbar.nbp-toolbar {
+  background: #1c2d5e !important;
+  color: #ffffff !important;
+}
+
+/* Override Material primary button */
+.mat-mdc-fab.nbp-send-btn {
+  --mdc-fab-container-color: #b09456 !important;
+  --mdc-fab-icon-color: #ffffff !important;
+}

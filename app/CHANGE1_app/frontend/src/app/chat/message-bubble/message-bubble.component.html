@@ -1,0 +1,7 @@
+<div class="bubble-row" [class.user]="isUser" [class.assistant]="!isUser">
+  <mat-card class="bubble" [class.user-bubble]="isUser" [class.assistant-bubble]="!isUser">
+    <mat-card-content>
+      <p [innerHTML]="formattedContent"></p>
+    </mat-card-content>
+  </mat-card>
+</div>
