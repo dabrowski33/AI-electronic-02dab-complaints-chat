@@ -85,3 +85,26 @@ test.describe('Off-topic guardrail', () => {
       .toMatch(/reklamacj|zwrot|zgłoszeni/);
   });
 });
+
+test.describe('Happy path — Laptop Reklamacja (BSOD / demonstrated live)', () => {
+  test('Dell XPS 15 BSOD complaint is processed with PNG laptop image', async ({ page }) => {
+    // This is the exact scenario demonstrated live in today's training session.
+    // The PNG laptop image exercises the vision model's real multimodal path.
+    await fillAndSubmitForm(page, {
+      type: 'REKLAMACJA',
+      categoryLabel: 'Laptopy i komputery',
+      model: 'Dell XPS 15 9530',
+      purchaseDate: '10.11.2023',
+      reason:
+        'Laptop po uruchomieniu wyświetla niebieski ekran śmierci (BSOD) z błędem MEMORY_MANAGEMENT. Problem pojawia się losowo przy większym obciążeniu.',
+      imagePath: IMAGES.laptopPng,
+    });
+
+    // Navigated to chat with a valid decision badge + mandatory disclaimer.
+    await expectDecisionAndDisclaimer(page);
+
+    // Case summary reflects the submitted complaint data.
+    await expect(page.locator('.case-summary')).toContainText('Dell XPS 15 9530');
+    await expect(page.locator('.case-summary')).toContainText('Reklamacja');
+  });
+});

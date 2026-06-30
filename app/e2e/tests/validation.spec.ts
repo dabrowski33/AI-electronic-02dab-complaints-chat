@@ -59,4 +59,34 @@ test.describe('Validation paths', () => {
     await expect(page).toHaveURL('/');
     await expect(page.locator('.upload-error')).toContainText(/wymagane/i);
   });
+
+  test('Zwrot can be submitted without a reason (opis is optional for returns)', async ({ page }) => {
+    // Regression guard: for Zwrot, the "Opis usterki" field is optional.
+    // If this test fails (stays on '/'), the form incorrectly requires a reason for a return.
+    await page.goto('/');
+
+    await page.getByRole('combobox', { name: /Typ zgłoszenia/ }).click();
+    await page.getByRole('option', { name: 'Zwrot' }).click();
+
+    await page.getByRole('combobox', { name: /Kategoria sprzętu/ }).click();
+    await page.getByRole('option', { name: 'Smartfony i telefony' }).click();
+
+    await page.getByRole('textbox', { name: /Model/ }).fill('Nokia 3310');
+
+    await page.getByRole('textbox', { name: /Data zakupu/ }).fill('01.06.2024');
+
+    // Intentionally leave reason/opis blank — it must NOT block submission for Zwrot.
+
+    const [fileChooser] = await Promise.all([
+      page.waitForEvent('filechooser'),
+      page.getByRole('button', { name: /Wybierz zdjęcie/ }).click(),
+    ]);
+    await fileChooser.setFiles(IMAGES.phoneJpg);
+
+    await page.getByRole('button', { name: /Wyślij zgłoszenie/ }).click();
+
+    // Form was accepted — navigated away from intake screen to the chat view.
+    // Real LLM call, so allow up to 45 s.
+    await expect(page).toHaveURL(/\/chat\/.+/, { timeout: 45_000 });
+  });
 });
