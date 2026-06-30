@@ -22,8 +22,8 @@ app:
     # exclusively — never fall back to a machine-global OPENAI_API_KEY, which would leak a
     # personal OpenAI key to the OpenRouter endpoint (causes 401 "Missing Authentication header").
     api-key: ${OPENROUTER_API_KEY:}
-    vision-model: ${OPENROUTER_VISION_MODEL:${OPENROUTER_MODEL:openai/gpt-4o-mini}}
-    text-model: ${OPENROUTER_TEXT_MODEL:${OPENROUTER_MODEL:openai/gpt-4o-mini}}
+    vision-model: ${OPENROUTER_VISION_MODEL:${OPENROUTER_MODEL:openai/gpt-5.4-mini}}
+    text-model: ${OPENROUTER_TEXT_MODEL:${OPENROUTER_MODEL:openai/gpt-5.4-mini}}
     app-url: ${OPENROUTER_APP_URL:}
     app-title: ${OPENROUTER_APP_TITLE:Hardware Service Decision Copilot}
   image:
